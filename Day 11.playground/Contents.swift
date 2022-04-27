@@ -71,3 +71,16 @@ print(honda.changeGear(gear: 100))
 print("\(honda.model) is in \(honda.gears)")
 print(honda.changeGear(gear: 9))
 print("\(honda.model) is in \(honda.gears)")
+
+
+struct Dog {
+    let color: String
+    private(set) var speed: Int = 5
+    private var id: String = "3234234"
+    
+    init(color: String) {
+        self.color = color
+    }
+}
+
+var poodle = Dog(color: "White")
