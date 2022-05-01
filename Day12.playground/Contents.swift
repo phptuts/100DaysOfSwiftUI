@@ -9,9 +9,24 @@ class Game {
             print("Score is now \(score)")
         }
     }
+    
+    let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
 }
 
-var newGame = Game()
+class Basketball: Game {
+    let maxTime: Int
+    
+    init(maxTime: Int) {
+        self.maxTime = maxTime
+        super.init(name: "Basketball")
+    }
+}
+
+var newGame = Game(name: "Ball")
 
 newGame.score += 10
 
@@ -84,6 +99,7 @@ var user1 = User()
 var user3 = user1.copy()
 var user2 = user1
 user1.username = "Taylor"
+print(user1.username)
 print(user2.username)
 print(user3.username)
 
