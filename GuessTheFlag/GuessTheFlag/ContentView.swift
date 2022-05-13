@@ -7,6 +7,32 @@
 
 import SwiftUI
 
+struct FlagImage: View {
+    
+    let flagImage: String
+    
+    var body: some View {
+        Image(flagImage)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            .shadow(radius: 5)
+    }
+}
+
+struct BlueLargeText: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(Color(red: 0.1, green: 0.2, blue: 0.45 ))
+    }
+}
+
+extension View {
+    func largeBlueText() -> some View {
+        modifier(BlueLargeText())
+    }
+}
+
 struct ContentView: View {
 
     @State var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Russia", "Spain", "UK", "US"].shuffled()
@@ -42,10 +68,7 @@ struct ContentView: View {
                         Button {
                             flagTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .shadow(radius: 5)
+                            FlagImage(flagImage: countries[number])
                         }
                     }
                 }
@@ -55,9 +78,7 @@ struct ContentView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 Spacer()
                 Spacer()
-                Text("Score: \(score)")
-                    .foregroundColor(.white)
-                    .font(.title.bold())
+                Text("Score: \(score)").largeBlueText()
                 Spacer()
             }.padding()
 

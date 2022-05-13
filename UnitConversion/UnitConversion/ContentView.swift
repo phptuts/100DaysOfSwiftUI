@@ -12,9 +12,9 @@ enum Temperature: String, Equatable, CaseIterable, Comparable {
         lhs.rawValue < rhs.rawValue
     }
     
-    case Fahrenheit = "Fahrenheit"
-    case Celcius = "Celcius"
-    case Kelvin = "Kelvin"
+    case Fahrenheit
+    case Celcius
+    case Kelvin
 }
 
 struct ContentView: View {
@@ -30,20 +30,24 @@ struct ContentView: View {
     @FocusState var keyboardOn: Bool
     
     var outputTemp: Double {
-        if (startingUnit == .Celcius && endingUnit == .Fahrenheit) {
-            return (temperature * 9/5) + 32
-
-        } else if (startingUnit == .Celcius && endingUnit == .Kelvin) {
-            return temperature + 273.15
-        } else if (startingUnit == .Kelvin && endingUnit == .Fahrenheit) {
-            return (temperature - 273.15) * 9/5 + 32
-        } else if (startingUnit == .Kelvin && endingUnit == .Celcius) {
-            return temperature - 273.15
-        } else if (startingUnit == .Fahrenheit && endingUnit == .Celcius) {
+        
+        switch (startingUnit, endingUnit) {
+        case (.Fahrenheit, .Celcius):
             return (temperature - 32) * (5/9)
-        } else {
-            return (25 - 32) * 5/9 + 273.15
+        case (.Fahrenheit, .Kelvin):
+            return (temperature - 32) * 5/9 + 273.15
+        case (.Celcius, .Kelvin):
+            return temperature + 273.15
+        case (.Celcius, .Fahrenheit):
+            return (temperature * 9/5) + 32
+        case (.Kelvin, .Fahrenheit):
+            return (temperature - 273.15) * 9/5 + 32
+        case (.Kelvin, .Celcius):
+            return temperature - 273.15
+        case (.Kelvin, .Kelvin), (.Celcius, .Celcius), (.Fahrenheit, .Fahrenheit):
+            return temperature
         }
+
     }
 
     
@@ -69,12 +73,12 @@ struct ContentView: View {
                 }
                 Section {
                     Picker("Ending Units", selection: $endingUnit) {
-                        ForEach(unitTypes.filter { $0 != startingUnit }.sorted(), id: \.self) {
+                        ForEach(unitTypes.sorted(), id: \.self) {
                             Text($0.rawValue)
                         }
                     }.pickerStyle(.segmented)
                 } header: {
-                    Text("Ending Units")
+                    Text("Ending Units \(endingUnit.rawValue)")
                 }
                 Section {
                     Text(round(outputTemp * 1000) / 1000 , format: .number)
