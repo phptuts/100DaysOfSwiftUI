@@ -13,6 +13,8 @@ struct ContentView: View {
     @State private var rootWord = ""
     @State private var newWord = ""
     
+    @State private var score = 0
+    
     @State private var errorTitle = ""
     @State private var errorMessage = ""
     @State private var showingError = false
@@ -20,20 +22,29 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                Section {
-                    TextField("Enter your word", text: $newWord).autocapitalization(.none)
-                }
-                Section {
-                    ForEach(usedWords, id: \.self) { word in
-                        HStack {
-                            Image(systemName: "\(word.count).circle")
-                            Text(word)
-                        }
+            VStack {
+                Text(rootWord).font(.largeTitle).bold()
+                List {
+                    Section {
+                        TextField("Enter your word", text: $newWord).autocapitalization(.none)
                         
                     }
+                    Section {
+                        ForEach(usedWords, id: \.self) { word in
+                            HStack {
+                                Image(systemName: "\(word.count).circle")
+                                Text(word)
+                            }
+                            
+                        }
+                    }
                 }
-            }.navigationTitle(rootWord)
+            }.navigationTitle("Score: \(score)")
+                .toolbar {
+                    Button("New Game") {
+                        startGame()
+                    }
+                }
                 .onSubmit(addNewWord)
                 .onAppear(perform: startGame)
                 .alert(errorTitle, isPresented: $showingError) {
@@ -50,7 +61,11 @@ struct ContentView: View {
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard answer.count > 0 else { return }
+        guard answer.count >= 3 else {
+            wordError(title: "Word too short", message: "Word must be greater than 3 letters")
+            return
+            
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used alreadly", message: "Be more originial")
@@ -71,6 +86,7 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
+        score += Int((usedWords.count + rootWord.count) / 2)
         newWord = ""
     }
     
@@ -80,6 +96,8 @@ struct ContentView: View {
                 let allWords = startWords.components(separatedBy: "\n")
                 
                 rootWord = allWords.randomElement() ?? "silkworm"
+                score = 0
+                usedWords.removeAll()
                 return
             }
         }
