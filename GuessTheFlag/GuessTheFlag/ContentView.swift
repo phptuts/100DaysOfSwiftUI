@@ -27,6 +27,8 @@ struct BlueLargeText: ViewModifier {
     }
 }
 
+
+
 extension View {
     func largeBlueText() -> some View {
         modifier(BlueLargeText())
@@ -45,6 +47,10 @@ struct ContentView: View {
     @State private var questionNumber = 1;
     @State private var showEndGameAlert = false
     
+    @State private var flaggedClicked = 0
+    @State private var flagRotations = [0.0, 0.0, 0.0]
+    @State private var flagOpacity = [1.0, 1.0, 1.0]
+    @State private var flagScale = [1.0, 1.0, 1.0]
     @State private var score = 0
     
     var body: some View {
@@ -65,11 +71,60 @@ struct ContentView: View {
                     }
                     
                     ForEach(0..<3) { number in
+                        
                         Button {
-                            flagTapped(number)
+                            flagRotations[number] += 360
+
+                            for i in 0..<flagScale.count {
+                                flagOpacity[i] = number == i ? 1 : 0.25;
+                                flagScale[i] = number == i ? 1 : 0.75;
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                flagScale = [1.0, 1.0, 1.0]
+                                flagOpacity = [1.0, 1.0, 1.0]
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                    flagTapped(number)
+                                }
+                            }
+                            
                         } label: {
                             FlagImage(flagImage: countries[number])
+                                .rotation3DEffect(.degrees(flagRotations[number]), axis: (x: 0, y: 1, z: 0))
+                                .animation(.easeInOut(duration: 0.5), value: flagRotations[number])
+                                .scaleEffect(flagScale[number])
+                                .animation(.easeInOut(duration: 0.5), value: flagScale[number])
+                                .opacity(flagOpacity[number])
+                                .animation(.easeInOut(duration: 0.5), value: flagOpacity[number])
+                                
                         }
+                        
+//                        Button {
+//                            withAnimation(.easeIn(duration: 0.5)) {
+//                                flagRotations[number] += 360
+//
+//                                for i in 0..<flagScale.count {
+//                                    flagOpacity[i] = number == i ? 1 : 0.25;
+//                                    flagScale[i] = number == i ? 1 : 0.75;
+//                                }
+//                            }
+//
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+//                                withAnimation(.easeOut(duration: 0.5)) {
+//                                    flagOpacity = [1.0, 1.0, 1.0]
+//                                    flagScale = [1.0, 1.0, 1.0]
+//                                }
+//                                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+//                                    flagTapped(number)
+//                                })
+//                            })
+//                        } label: {
+//                            FlagImage(flagImage: countries[number])
+//                                .rotation3DEffect(.degrees(flagRotations[number]), axis: (x: 0, y: 1, z: 0))
+//                                .scaleEffect(flagScale[number])
+//                                .opacity(flagOpacity[number])
+//
+//                        }
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -104,7 +159,8 @@ struct ContentView: View {
     }
     
     func flagTapped(_ number: Int) {
-        selectedAnswer = number
+        
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
@@ -125,8 +181,10 @@ struct ContentView: View {
         }
         
         
+        
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        flaggedClicked = 0
     }
 }
 
