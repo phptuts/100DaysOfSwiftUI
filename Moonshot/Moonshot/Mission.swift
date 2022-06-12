@@ -21,6 +21,16 @@ struct Mission: Codable, Identifiable {
     let crew: [CrewRole]
     let description: String
     
+    func createCrewMembers(astronauts: [String: Astronaut]) -> [CrewMember] {
+        return self.crew.map { member in
+            if let astronaut = astronauts[member.name] {
+                return CrewMember(role: member.role, astronaut: astronaut)
+            } else {
+                fatalError("Missing \(member.name)")
+            }
+        }
+    }
+    
     var displayName: String {
         "Apollo \(id)"
     }
@@ -32,4 +42,5 @@ struct Mission: Codable, Identifiable {
     var formattedLaunchDate: String {
         launchDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A"
     }
+    
 }
