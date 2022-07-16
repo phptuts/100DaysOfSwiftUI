@@ -15,6 +15,10 @@ struct DetailView: View {
     
     let book: Book
     
+    var dateReviewd: String {
+         book.created?.formatted(date: .abbreviated, time: .omitted) ?? "Unknown Date"
+    }
+    
     var body: some View {
         ScrollView {
             ZStack(alignment: .bottomTrailing) {
@@ -37,6 +41,9 @@ struct DetailView: View {
                 .foregroundColor(.secondary)
             
             Text(book.review ?? "No Review")
+                .padding()
+            
+            Text("Date Review: \(dateReviewd)")
                 .padding()
             
             RatingView(rating: .constant(Int(book.rating)))

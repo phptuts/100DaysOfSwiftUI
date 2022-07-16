@@ -11,6 +11,7 @@
 		8F6CC9CD287D242C004CD979 /* AddBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6CC9CC287D242C004CD979 /* AddBookView.swift */; };
 		8F6CC9CF287D2DA9004CD979 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6CC9CE287D2DA9004CD979 /* RatingView.swift */; };
 		8F6CC9D1287D2F9E004CD979 /* EmojiRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6CC9D0287D2F9E004CD979 /* EmojiRatingView.swift */; };
+		8FBDB2572882341100B1ABC8 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FBDB2562882341100B1ABC8 /* CustomTextField.swift */; };
 		8FD8E564287940A500789698 /* BookWormApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD8E563287940A500789698 /* BookWormApp.swift */; };
 		8FD8E566287940A500789698 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD8E565287940A500789698 /* ContentView.swift */; };
 		8FD8E568287940A900789698 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FD8E567287940A900789698 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 		8F6CC9CC287D242C004CD979 /* AddBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBookView.swift; sourceTree = "<group>"; };
 		8F6CC9CE287D2DA9004CD979 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		8F6CC9D0287D2F9E004CD979 /* EmojiRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRatingView.swift; sourceTree = "<group>"; };
+		8FBDB2562882341100B1ABC8 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		8FD8E560287940A500789698 /* BookWorm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookWorm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FD8E563287940A500789698 /* BookWormApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookWormApp.swift; sourceTree = "<group>"; };
 		8FD8E565287940A500789698 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				8F6CC9CC287D242C004CD979 /* AddBookView.swift */,
 				8FD8E563287940A500789698 /* BookWormApp.swift */,
 				8FD8E565287940A500789698 /* ContentView.swift */,
+				8FBDB2562882341100B1ABC8 /* CustomTextField.swift */,
 				8FD8E574287945A500789698 /* DataController.swift */,
 				8F247A87287FD9F70068EE9D /* DetailView.swift */,
 				8F6CC9D0287D2F9E004CD979 /* EmojiRatingView.swift */,
@@ -163,6 +166,7 @@
 				8F6CC9CF287D2DA9004CD979 /* RatingView.swift in Sources */,
 				8FD8E564287940A500789698 /* BookWormApp.swift in Sources */,
 				8F6CC9CD287D242C004CD979 /* AddBookView.swift in Sources */,
+				8FBDB2572882341100B1ABC8 /* CustomTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
