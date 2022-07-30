@@ -10,7 +10,7 @@ import Foundation
 
 
 class DataController: ObservableObject {
-    let container = NSPersistentContainer(name: "Shoes")
+    let container = NSPersistentContainer(name: "People")
     
     init() {
         container.loadPersistentStores { description, error in

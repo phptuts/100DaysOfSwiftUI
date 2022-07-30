@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct UserListView: View {    
-    let users: [User]
+    let users: [CachedUser]
     
-    let displayUsers: [User]
+    let displayUsers: [CachedUser]
     
     var body: some View {
         List {
@@ -19,12 +19,11 @@ struct UserListView: View {
                     DetailView(user: user, users: users)
                 } label: {
                     HStack {
-                        Text(user.name)
+                        Text(user.wrapppedName)
                         Spacer()
-                        Text(user.company)
+                        Text(user.wrappedComppany)
                     }
                 }
-                
             }
         }
     }

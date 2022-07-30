@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct ChallengeDay60NetworkAppApp: App {
+    @State private var dataController = DataController()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }
