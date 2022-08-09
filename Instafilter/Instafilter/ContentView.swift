@@ -13,6 +13,8 @@ struct ContentView: View {
     
     @State private var image: Image?
     @State private var filterIntensity = 0.5
+    @State private var radius = 0.5
+    @State private var size = 0.5
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
     @State private var processedImage: UIImage?
@@ -45,11 +47,24 @@ struct ContentView: View {
                         }
                 }.padding(.vertical)
                 HStack {
+                    Text("Size")
+                    Slider(value: $size)
+                        .onChange(of: size) { _ in applyProcessing()
+                        }
+                }.padding(.vertical)
+                HStack {
+                    Text("Radius")
+                    Slider(value: $radius)
+                        .onChange(of: radius) { _ in applyProcessing()
+                        }
+                }.padding(.vertical)
+                HStack {
                     Button("Change Filter") {
                         showingFilterSheet = true
                     }
                     Spacer()
                     Button("Save", action: save)
+                        .disabled(image == nil)
                 }
             }.padding([.horizontal, .bottom])
                 .navigationTitle("InstaFilter")
@@ -63,7 +78,9 @@ struct ContentView: View {
                     Button("Crystallize") { setFilter(CIFilter.crystallize())}
                     Button("Edges") { setFilter(CIFilter.edges())}
                     Button("Gaussian Blue") { setFilter(CIFilter.gaussianBlur())}
-                    Button("Pixellate") { setFilter(CIFilter.pixellate())}
+                    Button("CIBloom") { setFilter(CIFilter.bloom())}
+                    Button("Comic Effect") { setFilter(CIFilter.comicEffect())}
+                    Button("Twirl Distortion") { setFilter(CIFilter.twirlDistortion())}
                     Button("Sepia Tone") { setFilter(CIFilter.sepiaTone())
                     }
                     Button("Unsharp Mask") { setFilter(CIFilter.unsharpMask())
@@ -88,16 +105,21 @@ struct ContentView: View {
     func applyProcessing() {
         let inputKeys = currentFilter.inputKeys
         
+        if inputKeys.contains(kCIInputCenterKey) {
+            currentFilter.setValue(CIVector(x:1000, y:1000), forKey: kCIInputCenterKey)
+        }
+
+        
         if inputKeys.contains(kCIInputIntensityKey) {
             currentFilter.setValue(filterIntensity, forKey: kCIInputIntensityKey)
         }
         
         if inputKeys.contains(kCIInputRadiusKey) {
-            currentFilter.setValue(filterIntensity * 200, forKey: kCIInputRadiusKey)
+            currentFilter.setValue(radius * 1000, forKey: kCIInputRadiusKey)
         }
         
         if inputKeys.contains(kCIInputScaleKey) {
-            currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey)
+            currentFilter.setValue(size * 30, forKey: kCIInputScaleKey)
         }
         
         
