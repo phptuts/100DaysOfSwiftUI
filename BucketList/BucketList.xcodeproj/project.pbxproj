@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F21209428A9D6E400AD44EC /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F21209328A9D6E400AD44EC /* Result.swift */; };
 		8F48612C28A3F9060083DCC1 /* BucketListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F48612B28A3F9060083DCC1 /* BucketListApp.swift */; };
 		8F48612E28A3F9060083DCC1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F48612D28A3F9060083DCC1 /* ContentView.swift */; };
 		8F48613028A3F90A0083DCC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F48612F28A3F90A0083DCC1 /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8F21209328A9D6E400AD44EC /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		8F48612828A3F9060083DCC1 /* BucketList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BucketList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F48612B28A3F9060083DCC1 /* BucketListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BucketListApp.swift; sourceTree = "<group>"; };
 		8F48612D28A3F9060083DCC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				8F48612D28A3F9060083DCC1 /* ContentView.swift */,
 				8FE0FB2C28A8A15B00FBFB1B /* EditView.swift */,
 				8FE0FB2A28A89D4000FBFB1B /* Location.swift */,
+				8F21209328A9D6E400AD44EC /* Result.swift */,
 				8F48612F28A3F90A0083DCC1 /* Assets.xcassets */,
 				8F48613128A3F90A0083DCC1 /* Preview Content */,
 				8F48613928A400C70083DCC1 /* FileManagerExtension.swift */,
@@ -146,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F21209428A9D6E400AD44EC /* Result.swift in Sources */,
 				8F48612E28A3F9060083DCC1 /* ContentView.swift in Sources */,
 				8FE0FB2D28A8A15B00FBFB1B /* EditView.swift in Sources */,
 				8F48613A28A400C70083DCC1 /* FileManagerExtension.swift in Sources */,
