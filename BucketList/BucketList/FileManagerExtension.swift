@@ -10,29 +10,31 @@ import Foundation
 
 extension FileManager {
     
-    static func write(text: String, fileName: String) -> Bool {
+    static func write<T: Codable>(objects: T, fileName: String) -> Bool {
         let url = getDocumentsDirectory().appendingPathComponent(fileName)
 
         do {
-            try text.write(to: url, atomically: true, encoding: .utf8)
-            return true
+            let data = try JSONEncoder().encode(objects)
+            try data.write(to: url, options: [.atomicWrite, .completeFileProtection])
         } catch {
             print(error.localizedDescription)
-            return false
         }
+        
+        return false
     }
     
-    static func read(fileName: String) throws -> String {
+    static func read<T: Codable>(fileName: String) throws -> T {
         let url = getDocumentsDirectory().appendingPathComponent(fileName)
 
-        return try String(contentsOf: url)
+        let data = try Data(contentsOf: url)
+        
+        return try JSONDecoder().decode(T.self, from: data)
     }
     
     static func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
-            // just send back the first one, which ought to be the only one
-            return paths[0]
-        
+        // just send back the first one, which ought to be the only one
+        return paths[0]
     }
 }
