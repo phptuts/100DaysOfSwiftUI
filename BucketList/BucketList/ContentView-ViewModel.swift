@@ -16,6 +16,8 @@ extension ContentView {
         @Published private(set) var locations: [Location]
         @Published var selectedPlace: Location?
         @Published var isUnlocked = false
+        @Published var error = ""
+        @Published var showError = false
         
         
         init() {
@@ -60,11 +62,15 @@ extension ContentView {
                             self.isUnlocked = true
                         }
                     } else {
-                        // error
+                        Task { @MainActor in
+                            self.error = "Authentication failed"
+                            self.showError = true
+                        }
                     }
                 })
             } else {
-                // no biometrics
+                self.error = "Device not compatible with authentication."
+                self.showError = true
             }
         }
     }
