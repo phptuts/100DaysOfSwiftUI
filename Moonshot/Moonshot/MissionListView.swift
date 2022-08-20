@@ -23,6 +23,7 @@ struct MissionListView: View {
                             .scaledToFit()
                             .frame(width: 100, height: 100)
                             .padding()
+                            .accessibilityHidden(true)
 
                           VStack {
                             Text(mission.displayName)
@@ -32,11 +33,16 @@ struct MissionListView: View {
                                 .foregroundColor(.white.opacity(0.5))
                             
                          }
+                          .accessibilityElement(children: .ignore)
+                          .accessibilityLabel("Mission \(mission.displayName) launched on \(mission.formattedLaunchDate == "N/A" ? "Unknown Date" :  mission.formattedLaunchDate)")
+
                         
                         .frame(maxWidth: .infinity)
                         .padding(.vertical)
                         .background(.lightBackground)
-                }.clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(.lightBackground))
                 
             }

@@ -34,7 +34,8 @@ struct ContentView: View {
                             HStack {
                                 Image(systemName: "\(word.count).circle")
                                 Text(word)
-                            }
+                            }.accessibilityElement()
+                                .accessibilityLabel("\(word), \(word.count) letters")
                             
                         }
                     }

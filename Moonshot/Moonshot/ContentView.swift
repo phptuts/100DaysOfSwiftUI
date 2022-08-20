@@ -51,7 +51,7 @@ struct ContentView: View {
                     ToolbarItem {
                         Button("\(isGrid ? "List" : "Grid")") {
                             isGrid.toggle()
-                        }
+                        }.accessibilityLabel("Change to \(isGrid ? "List View" : "Grid View")")
                     }
                 }
         }

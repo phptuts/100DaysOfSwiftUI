@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+  
 struct CheckoutView: View {
     
     @ObservedObject var orderStore: OrderStore
@@ -25,7 +25,9 @@ struct CheckoutView: View {
                             .scaledToFit()
                 } placeholder: {
                     ProgressView()
-                }
+                        .accessibilityElement(children: .ignore)
+                }.accessibilityElement(children: .ignore)
+            
                 .frame(height: 233)
                 Text("Your total is \(orderStore.order.cost, format: .currency(code: "USD"))")
                     .font(.title)

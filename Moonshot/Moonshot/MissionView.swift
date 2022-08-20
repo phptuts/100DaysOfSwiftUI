@@ -22,6 +22,7 @@ struct MissionView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(maxWidth: geometry.size.width * 0.6)
+                        .accessibilityLabel("\(mission.displayName) logo")
                     if let launchDate = mission.launchDate {
                         Text(launchDate.formatted(date:.abbreviated, time: .omitted))
                             .padding()

@@ -46,7 +46,8 @@ struct ExpenseItemView: View {
             Text(item.amount, format: .currency(code: Locale.current.currencyCode ?? "USD"))
                 .font(fontMoney)
                 .foregroundColor(textColor)
-        }
+        }.accessibilityElement(children: .ignore)
+            .accessibilityLabel("Spent \(NumberFormatter.localizedString(from: item.amount as NSNumber, number: .currency))) on \(item.name).  Classified as \(item.type).")
     }
 }
 
