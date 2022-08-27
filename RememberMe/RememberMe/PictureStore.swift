@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 struct Picture: Codable, Identifiable, Comparable {
     
@@ -14,6 +15,12 @@ struct Picture: Codable, Identifiable, Comparable {
     var id = UUID()
     var name: String
     var url: URL
+    var latitude: Double
+    var longitude: Double
+    
+    var region: MKCoordinateRegion {
+        MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
+    }
     
     static func < (lhs: Picture, rhs: Picture) -> Bool {
         lhs.name < rhs.name
@@ -23,7 +30,9 @@ struct Picture: Codable, Identifiable, Comparable {
 class PictureStore: ObservableObject {
     
     @Published var pictures: [Picture] = []
+    let locationFetcher = LocationFetcher()
     init() {
+        locationFetcher.start()
         if let pics: [Picture] =  try? FileManager.read(fileName: "people.json") {
             pictures = pics
         }
@@ -31,11 +40,20 @@ class PictureStore: ObservableObject {
     
     
     func addPicture(name: String, uiImage: UIImage) throws {
-        let id = UUID()
-        let url = try savePicture(image: uiImage, id: id)
-        let newPicture = Picture(id: id, name: name, url: url)
-        pictures.append(newPicture)
-        FileManager.write(objects: pictures, fileName: "people.json")
+        if let coordinate = locationFetcher.lastKnownLocation {
+            let id = UUID()
+            let url = try savePicture(image: uiImage, id: id)
+            let newPicture = Picture(
+                id: id,
+                name: name,
+                url: url,
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude
+            )
+            pictures.append(newPicture)
+            FileManager.write(objects: pictures, fileName: "people.json")
+
+        }
     }
     
     func savePicture(image: UIImage, id: UUID) throws -> URL {

@@ -16,6 +16,7 @@
 		8F03792528B498C400CFAF55 /* PictureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F03792428B498C400CFAF55 /* PictureStore.swift */; };
 		8F03792728B85BCF00CFAF55 /* FormPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F03792628B85BCF00CFAF55 /* FormPictureView.swift */; };
 		8F03792928B8784E00CFAF55 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F03792828B8784E00CFAF55 /* PictureView.swift */; };
+		8F5BD74428B9AC9B0058CDD1 /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5BD74328B9AC9B0058CDD1 /* LocationFetcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		8F03792428B498C400CFAF55 /* PictureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureStore.swift; sourceTree = "<group>"; };
 		8F03792628B85BCF00CFAF55 /* FormPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPictureView.swift; sourceTree = "<group>"; };
 		8F03792828B8784E00CFAF55 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
+		8F5BD74328B9AC9B0058CDD1 /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				8F03791228B48F0B00CFAF55 /* RememberMeApp.swift */,
 				8F03791428B48F0B00CFAF55 /* ContentView.swift */,
+				8F5BD74328B9AC9B0058CDD1 /* LocationFetcher.swift */,
 				8F03792428B498C400CFAF55 /* PictureStore.swift */,
 				8F03792228B4934D00CFAF55 /* FileManager.swift */,
 				8F03792028B490A000CFAF55 /* ImagePicker.swift */,
@@ -154,6 +157,7 @@
 			files = (
 				8F03792528B498C400CFAF55 /* PictureStore.swift in Sources */,
 				8F03792728B85BCF00CFAF55 /* FormPictureView.swift in Sources */,
+				8F5BD74428B9AC9B0058CDD1 /* LocationFetcher.swift in Sources */,
 				8F03792128B490A000CFAF55 /* ImagePicker.swift in Sources */,
 				8F03791528B48F0B00CFAF55 /* ContentView.swift in Sources */,
 				8F03792928B8784E00CFAF55 /* PictureView.swift in Sources */,
@@ -290,6 +294,7 @@
 				DEVELOPMENT_TEAM = 8F6L8PBYP8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Recording picture location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -319,6 +324,7 @@
 				DEVELOPMENT_TEAM = 8F6L8PBYP8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Recording picture location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

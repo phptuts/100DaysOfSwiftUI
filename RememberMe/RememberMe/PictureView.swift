@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct PictureView: View {
     
@@ -14,12 +15,20 @@ struct PictureView: View {
 
     var body: some View {
         VStack {
-            Text(picture.name).font(.largeTitle)
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
             Spacer()
-        }.padding()
+            Map(coordinateRegion: .constant(picture.region), annotationItems: [picture]) { pic in
+                MapPin(coordinate: pic.region.center)
+            }
+            Spacer()
+            Spacer()
+            Spacer()
+        }
+        .padding()
+        .navigationTitle(picture.name)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

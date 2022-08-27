@@ -13,6 +13,7 @@ struct FormPictureView: View {
     @State var name = ""
     @ObservedObject var pictureStore: PictureStore
     @Environment(\.dismiss) private var dismiss
+    let locationFetcher = LocationFetcher()
 
     var body: some View {
             
