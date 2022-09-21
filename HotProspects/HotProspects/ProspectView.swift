@@ -14,31 +14,67 @@ struct ProspectView: View {
         case none, contacted, uncontacted
     }
     
+    enum SortOption {
+        case name, date, none
+    }
+    
     let filter: FilterType
     @EnvironmentObject var prospects: Prospects
     
     @State private var isShowingScanner = false
     
+    @State private var showError = false
+    @State private var showSortOptions = false
+    @State private var sortOption = SortOption.none
+    
+
     var body: some View {
         NavigationView {
             List {
-                ForEach(filteredProspects) { prospect in
-                    VStack (alignment: .leading) {
-                        Text(prospect.name)
-                            .font(.headline)
-                        Text(prospect.emailAddress)
-                            .foregroundColor(.secondary)
+                ForEach(filteredAndSorted) { prospect in
+                    VStack {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(prospect.name)
+                                    .font(.headline)
+                                Text(prospect.emailAddress)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            if filter == .none {
+                               
+                                if prospect.isContacted {
+                                        Image(systemName: "person.crop.circle.fill.badge.checkmark")
+                                        .foregroundColor(.green)
+                                    } else {
+                                        Image(systemName: "person.crop.circle.badge.xmark")
+                                            .foregroundColor(.blue)
+                                    }
+                                }
+                                
+                        }
+                        
+                        
                     }.swipeActions {
                         if prospect.isContacted {
                             Button {
-                                prospects.toggle(prospect)
+                                do {
+                                   try prospects.toggle(prospect)
+                                } catch {
+                                    showError = true
+                                }
                             } label: {
                                 Label("Mark Uncontacted", systemImage: "person.crop.circle.badge.xmark")
                                     
                             }.tint(.blue)
                         } else {
                             Button {
-                                prospects.toggle(prospect)
+                                do {
+                                   try prospects.toggle(prospect)
+                                } catch {
+                                    showError = true
+                                }
+                                
                             } label: {
                                 Label("Mark Contacted", systemImage: "person.crop.circle.fill.badge.checkmark")
                                     
@@ -54,16 +90,43 @@ struct ProspectView: View {
                 }
             }
             
-            .navigationTitle(title)
+            .navigationTitle(title + " \(showError)")
             .toolbar {
-                Button {
-                    isShowingScanner = true
-                } label: {
-                    Label("Scan", systemImage: "qrcode.viewfinder")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        isShowingScanner = true
+                    } label: {
+                        Label("Scan", systemImage: "qrcode.viewfinder")
+                    }
                 }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showSortOptions = true
+                    } label: {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+                }
+               
             }
             .sheet(isPresented: $isShowingScanner) {
-                CodeScannerView(codeTypes: [.qr], simulatedData: "Noah Glaser\nglaserpower@gmail.com", completion: handleScan)
+                CodeScannerView(codeTypes: [.qr], simulatedData: "\(["Bill", "Fred", "Ash", "Last"].randomElement() ??  "Fred")\nglaserpower@gmail.com", completion: handleScan)
+            }
+            .alert("Error Saving", isPresented: $showError) {
+                Button("OK") {
+                    
+                }
+            }
+            .confirmationDialog("Sort By", isPresented: $showSortOptions) {
+                Button("Name") {
+                    sortOption = .name
+                }
+                Button("Newest Contact") {
+                    sortOption = .date
+                }
+                Button("None") {
+                    sortOption = .none
+                }
             }
         }
     }
@@ -79,14 +142,24 @@ struct ProspectView: View {
         }
     }
     
-    var filteredProspects: [Prospect] {
+    var filteredAndSorted: [Prospect] {
+        var peeps = [Prospect]()
         switch filter {
         case .none:
-            return prospects.people
+            peeps = prospects.people
         case .contacted:
-            return prospects.people.filter{ $0.isContacted}
+            peeps = prospects.people.filter{ $0.isContacted}
         case .uncontacted:
-            return prospects.people.filter { !$0.isContacted }
+            peeps = prospects.people.filter { !$0.isContacted }
+        }
+        
+        switch sortOption {
+        case .name:
+            return peeps.sorted(by: { $0.name < $1.name })
+        case .date:
+            return peeps.sorted(by: { $0.created > $1.created })
+        case .none:
+            return peeps
         }
     }
     
@@ -99,7 +172,12 @@ struct ProspectView: View {
             let person = Prospect()
             person.name = details[0]
             person.emailAddress = details[1]
-            prospects.add(person)
+            do {
+               try prospects.add(person)
+            } catch {
+                showError = true
+            }
+            
         case .failure(let error):
             print("Scanning failed: \(error.localizedDescription)")
         }

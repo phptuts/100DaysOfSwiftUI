@@ -9,43 +9,54 @@ import SwiftUI
 
 class Prospect: Identifiable, Codable {
     var id = UUID()
+    var created = Date()
     var name = "Anonymous"
     var emailAddress = ""
     fileprivate(set) var isContacted = false
     
 }
 
+enum TestError: Error {
+    case test
+}
+
+enum Sort {
+    case name, date
+}
 
 @MainActor class Prospects: ObservableObject {
     @Published private(set) var people: [Prospect]
     
-    let saveKey = "SavedData"
+    let fileName = "people.json"
+    
+    
+    
     
     init() {
-        if let data = UserDefaults.standard.data(forKey: saveKey) {
-            if let decoded = try? JSONDecoder().decode([Prospect].self, from: data) {
-                people = decoded
-                return
-            }
-        }
-        
-        people = []
-    }
-    
-    private func save() {
-        if let encoded = try? JSONEncoder().encode(people) {
-            UserDefaults.standard.set(encoded, forKey: saveKey)
+        do {
+            people = try FileManager.read(fileName: fileName)
+        } catch {
+            people = []
         }
     }
     
-    func toggle(_ prospect: Prospect) {
+    private func save() throws {
+       try FileManager.write(objects: people, fileName: fileName)
+    }
+    
+    func toggle(_ prospect: Prospect) throws {
         objectWillChange.send()
         prospect.isContacted.toggle()
-        save()
+        try save()
+        // For testing purposes
+        if people.count == 5 {
+            throw TestError.test
+        }
     }
     
-    func add(_ prospect: Prospect) {
+    func add(_ prospect: Prospect) throws {
         people.append(prospect)
-        save()
+        try save()
+        
     }
 }
