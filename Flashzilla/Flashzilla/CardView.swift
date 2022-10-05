@@ -15,11 +15,24 @@ struct CardView: View {
     
     @State private var isShowingAnswer = false
     @State private var offset = CGSize.zero
+    @State private var feedback = UINotificationFeedbackGenerator()
+    @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
 
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(.white)
+                .fill(
+                    differentiateWithoutColor ?
+                    .white :
+                    .white
+                    .opacity(1 - Double(abs(offset.width / 50)))
+
+                )
+                .background(
+                    differentiateWithoutColor ? nil :
+                    RoundedRectangle(cornerRadius: 25, style: .continuous)
+                        .fill(offset.width > 0 ? .green : .red)
+                )
                 .shadow(radius: 10)
             VStack {
                 Text(card.prompt)
@@ -40,9 +53,13 @@ struct CardView: View {
         .gesture(DragGesture()
             .onChanged { gesture in
                 offset = gesture.translation
+                feedback.prepare()
             }
             .onEnded { _ in
                 if abs(offset.width) > 100 {
+                    if offset.width < 0 {
+                        feedback.notificationOccurred(.error)
+                    }
                     removal?()
                 } else {
                     offset = .zero
