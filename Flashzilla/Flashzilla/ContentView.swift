@@ -43,9 +43,18 @@ struct ContentView: View {
                     .clipShape(Capsule())
                     .padding(.vertical, 5)
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
-                            removeCard(at: index)
+                    ForEach(cards, id: \.id) { card in
+                        let index = cards.firstIndex(where: { $0.id == card.id }) ?? 0
+                        
+                        CardView(card: card) {
+                            removeCard(card: card)
+                        } sendToBack: {
+                    
+                            var tempCards = cards.filter { $0.id != card.id}
+                            tempCards.insert(Card(prompt: card.prompt, answer: card.answer), at: 0)
+                            cards = tempCards
+                            print(cards)
+                            
                         }
                         .stacked(at: index, in: cards.count)
                         .allowsHitTesting(index == cards.count - 1)
@@ -88,7 +97,7 @@ struct ContentView: View {
                     HStack {
                         Button {
                             withAnimation {
-                                removeCard(at: cards.count - 1)
+                                removeCard(card: cards.last ?? Card.example)
                             }
                         } label: {
                             Image(systemName: "xmark.circle")
@@ -100,7 +109,7 @@ struct ContentView: View {
                         
                         Spacer()
                         Button {
-                            removeCard(at: cards.count - 1)
+                            removeCard(card: cards.last ?? Card.example)
                         } label : {
                             Image(systemName: "checkmark.circle")
                                 .background(.black.opacity(0.7))
@@ -122,6 +131,9 @@ struct ContentView: View {
                 timeRemaining -= 1
             }
         }
+        .onChange(of: cards) {
+            print("CARDS", $0)
+        }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active && cards.isEmpty {
                 cards = Card.getCards()
@@ -139,10 +151,9 @@ struct ContentView: View {
         
     }
     
-    func removeCard(at index: Int) {
+    func removeCard(card: Card) {
         
-        guard index >= 0 else { return }
-        cards.remove(at: index)
+        cards = cards.filter { $0.id != card.id }
         
         if cards.isEmpty {
             isActive = false

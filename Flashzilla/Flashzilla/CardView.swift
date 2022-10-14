@@ -7,11 +7,28 @@
 
 import SwiftUI
 
+
+extension RoundedRectangle {
+    func calcColor(offset: CGSize) -> Color {
+        if offset == .zero {
+            return .white
+        }
+        
+        return offset.width > 0 ? .green : .red
+    }
+    
+    func colorByOffset(offset: CGSize) -> some View {
+        self.fill(calcColor(offset: offset))
+    }
+}
+
 struct CardView: View {
     
     let card: Card
     
     let removal: (() -> Void)?
+    
+    let sendToBack: (() -> Void)?
     
     @State private var isShowingAnswer = false
     @State private var offset = CGSize.zero
@@ -32,7 +49,8 @@ struct CardView: View {
                 .background(
                     differentiateWithoutColor ? nil :
                     RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(offset.width > 0 ? .green : .red)
+                        .colorByOffset(offset: offset)
+//                        .fill(offset == .zero ? .white :  offset.width > 0 ? .green : .red)
                 )
                 .shadow(radius: 10)
             VStack {
@@ -69,8 +87,11 @@ struct CardView: View {
                 if abs(offset.width) > 100 {
                     if offset.width < 0 {
                         feedback.notificationOccurred(.error)
+                        sendToBack?()
+                    } else {
+                        removal?()
                     }
-                    removal?()
+                    
                 } else {
                     offset = .zero
                 }
@@ -84,6 +105,6 @@ struct CardView: View {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(card: Card.example, removal: {})
+        CardView(card: Card.example, removal: {}, sendToBack: {})
     }
 }
