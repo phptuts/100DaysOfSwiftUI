@@ -17,12 +17,16 @@ extension View {
 
 struct ContentView: View {
     
-    @State private var cards = Array<Card>(repeating: Card.example, count: 10)
+   
+    @State var cards = [Card]()
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+    @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     @State private var timeRemaining = 100
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @Environment(\.scenePhase) var scenePhase
     @State private var isActive = true
+    @State private var showingEditScreen = false
+    
     
     var body: some View {
         ZStack {
@@ -43,7 +47,9 @@ struct ContentView: View {
                         CardView(card: cards[index]) {
                             removeCard(at: index)
                         }
-                            .stacked(at: index, in: cards.count)
+                        .stacked(at: index, in: cards.count)
+                        .allowsHitTesting(index == cards.count - 1)
+                        .accessibilityHidden(index < cards.count - 1)
                     }
                 }
                 .allowsTightening(timeRemaining > 0)
@@ -56,37 +62,86 @@ struct ContentView: View {
                         .clipShape(Capsule())
                 }
             }
-            if differentiateWithoutColor {
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        showingEditScreen = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .padding()
+                            .background(.black.opacity(0.7))
+                            .clipShape(Circle())
+                    }
+                   
+                }
+                Spacer()
+            }.foregroundColor(.white)
+                .font(.largeTitle)
+                .padding()
+            
+            if differentiateWithoutColor || voiceOverEnabled {
                 VStack {
                     Spacer()
                     HStack {
-                        Image(systemName: "xmark.circle")
-                            .background(.black.opacity(0.7))
-                            .clipShape(Circle())
+                        Button {
+                            withAnimation {
+                                removeCard(at: cards.count - 1)
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle")
+                                .background(.black.opacity(0.7))
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Wrong")
+                        .accessibilityLabel("Mark your answer as being incorrect")
+                        
                         Spacer()
-                        Image(systemName: "checkmark.circle")
-                            .background(.black.opacity(0.7))
-                            .clipShape(Circle())
+                        Button {
+                            removeCard(at: cards.count - 1)
+                        } label : {
+                            Image(systemName: "checkmark.circle")
+                                .background(.black.opacity(0.7))
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Correct")
+                        .accessibilityLabel("Mark your answer as being correct")
                     }.foregroundColor(.white)
                         .font(.largeTitle)
                         .padding()
                 }
             }
-        }.onReceive(timer) { time in
+        }
+        .sheet(isPresented: $showingEditScreen) {
+            EditCards()
+        }
+        .onReceive(timer) { time in
             if timeRemaining > 0 && isActive {
                 timeRemaining -= 1
             }
         }
         .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active && cards.isEmpty {
+                cards = Card.getCards()
+            }
+            
             if newPhase == .active && !cards.isEmpty {
                 isActive = true
             } else {
                 isActive = false
             }
         }
+        .onChange(of: showingEditScreen) { show in
+            resetCards()
+        }
+        
     }
     
     func removeCard(at index: Int) {
+        
+        guard index >= 0 else { return }
         cards.remove(at: index)
         
         if cards.isEmpty {
@@ -95,7 +150,7 @@ struct ContentView: View {
     }
     
     func resetCards() {
-        cards = Array(repeating: Card.example, count: 10)
+        cards = Card.getCards()
         timeRemaining = 100
         isActive = true
     }
